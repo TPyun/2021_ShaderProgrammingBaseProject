@@ -513,11 +513,13 @@ void Renderer::Lecture3_Particle()
 	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
 
 	int attribVelocity = glGetAttribLocation(shader, "a_Velocity");
-	glEnableVertexAttribArray(attribPosition);
-	glVertexAttribPointer(attribVelocity, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (GLvoid*)(sizeof(float)*3));
+	glEnableVertexAttribArray(attribVelocity);
+	glVertexAttribPointer(attribVelocity, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (GLvoid*)(sizeof(float) * 3));
 
 	int uniformTime = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(uniformTime, gTime);
+	int uniformAccel = glGetUniformLocation(shader, "u_Accel");
+	glUniform3f(uniformAccel, 0.1, 0.1, 0.1);
 	gTime += 0.001f;
 	if (gTime > 1.f)
 	{
@@ -528,7 +530,33 @@ void Renderer::Lecture3_Particle()
 	glDisableVertexAttribArray(attribPosition);
 }
 
-//void Renderer::Lecture3_Particle()
+//void Renderer::Lecture3_Particle() // 점들 우로 움직이는거 3-4
+//{
+//	GLuint shader = m_Lecture3ParticleShader;
+//	glUseProgram(shader);
+//	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
+//
+//	int attribPosition = glGetAttribLocation(shader, "a_Position");
+//	glEnableVertexAttribArray(attribPosition);
+//	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+//
+//	int attribVelocity = glGetAttribLocation(shader, "a_Velocity");
+//	glEnableVertexAttribArray(attribPosition);
+//	glVertexAttribPointer(attribVelocity, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (GLvoid*)(sizeof(float)*3));
+//
+//	int uniformTime = glGetUniformLocation(shader, "u_Time");
+//	glUniform1f(uniformTime, gTime);
+//	gTime += 0.001f;
+//	if (gTime > 1.f)
+//	{
+//		gTime = 0.f;
+//	}
+//	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleVertexCount);
+//
+//	glDisableVertexAttribArray(attribPosition);
+//}
+
+//void Renderer::Lecture3_Particle() // 네모 작아지는거
 //{
 //	GLuint shader = m_Lecture3ParticleShader;
 //	glUseProgram(shader);
