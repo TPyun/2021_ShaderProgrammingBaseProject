@@ -115,7 +115,7 @@ void Renderer::CreateVertexBufferObjects()
 
 void Renderer::CreateParticle(int count)
 {
-	int floatCount = count * (3 + 3) * 3 * 2; //(x, y, z, vx, vy, vz)
+	int floatCount = count * (3 + 3) * 3 * 2; //(x, y, z, vx, vy, vz) 총 6개 정보라서 (3+3)임
 	float* particleVertices = new float[floatCount];
 	int vertexCount = count * 3 * 2;
 	int index = 0;
@@ -506,13 +506,23 @@ void Renderer::Lecture3_Particle()
 {
 	GLuint shader = m_Lecture3ParticleShader;
 	glUseProgram(shader);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
 
 	int attribPosition = glGetAttribLocation(shader, "a_Position");
 	glEnableVertexAttribArray(attribPosition);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
 	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
 
+	int attribVelocity = glGetAttribLocation(shader, "a_Velocity");
+	glEnableVertexAttribArray(attribPosition);
+	glVertexAttribPointer(attribVelocity, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (GLvoid*)(sizeof(float)*3));
 
+	int uniformTime = glGetUniformLocation(shader, "u_Time");
+	glUniform1f(uniformTime, gTime);
+	gTime += 0.001f;
+	if (gTime > 1.f)
+	{
+		gTime = 0.f;
+	}
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleVertexCount);
 
 	glDisableVertexAttribArray(attribPosition);
