@@ -34,7 +34,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	//Create VBOs
 	CreateVertexBufferObjects();
 	//Create Particles
-	CreateParticle(10000);
+	CreateParticle(1000);
 
 	//Initialize camera settings
 	m_v3Camera_Position = glm::vec3(0.f, 0.f, 1000.f);
@@ -139,7 +139,7 @@ void Renderer::CreateParticle(int count)
 	float* particleVertices = new float[floatCount];
 	int vertexCount = count * 3 * 2;
 	int index = 0;
-	float particleSize = 0.005f;
+	float particleSize = 0.1f;
 	for (int i = 0; i < count; i++)
 	{
 		float randomValueX = 0.f;
@@ -650,6 +650,10 @@ void Renderer::Lecture3_Particle()
 {
 	GLuint shader = m_Lecture3ParticleShader;
 	glUseProgram(shader);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOManyParticle);
 
 	int attribPosition = glGetAttribLocation(shader, "a_Position");
@@ -688,11 +692,12 @@ void Renderer::Lecture3_Particle()
 	glUniform1f(uniformTime, gTime);
 	int uniformAccel = glGetUniformLocation(shader, "u_Accel");
 	glUniform3f(uniformAccel, 0.0, 0.0, 0.0);
-	gTime += 0.005f;
+	gTime += 0.0005f;
 
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleVertexCount);
 
 	glDisableVertexAttribArray(attribPosition);
+	glDisable(GL_BLEND);
 }
 
 void Renderer::Lecture4_FSSandbox()
